@@ -1,0 +1,5 @@
+cartoonify.py
+ex5_helper.py
+/__pycache__
+*.pyc
+*.pyo
