@@ -1,8 +1,9 @@
-import urllib.request
-import unittest
-from typing import Any
+'''⸮⁉'''
 import difflib
 import pprint
+import unittest
+import urllib.request
+from typing import Any
 
 import cartoonify as user
 
@@ -34,7 +35,7 @@ class CartoonifyTests(unittest.TestCase):
             'Example from the forum: https://moodle2.cs.huji.ac.il/nu21/mod/forumng/discuss.php?d=2226&expand=1#p5642'
         )
 
-    def test__separate_channels__NAME_ME(self):
+    def test__separate_channels__more_examples(self):
         self.assertListEqual(
             [[[170, 45, 175], [251, 74, 79]],
              [[20, 154, 28], [210, 105, 183]],
@@ -44,8 +45,7 @@ class CartoonifyTests(unittest.TestCase):
                     [[170, 20, 35], [45, 154, 161], [175, 28, 9]],
                     [[251, 210, 134], [74, 105, 46], [79, 183, 139]]
                 ]
-            ),
-            'NAME ME'
+            )
         )
 
     def test__combine_channels__example_from_pdf(self):
@@ -66,7 +66,7 @@ class CartoonifyTests(unittest.TestCase):
             'Example from the forum: https://moodle2.cs.huji.ac.il/nu21/mod/forumng/discuss.php?d=2226&expand=1#p5642'
         )
 
-    def test__combine_channels__NAME_ME(self):
+    def test__combine_channels__more_examples(self):
         self.assertListEqual(
             [
                 [[170, 20, 35], [45, 154, 161], [175, 28, 9]],
@@ -76,8 +76,7 @@ class CartoonifyTests(unittest.TestCase):
                 [[[170, 45, 175], [251, 74, 79]],
                  [[20, 154, 28], [210, 105, 183]],
                     [[35, 161, 9], [134, 46, 139]]]
-            ),
-            'NAME ME'
+            )
         )
 
     def test__RGB2grayscale__example_from_pdf(self):
@@ -88,15 +87,14 @@ class CartoonifyTests(unittest.TestCase):
             'Example given on page 3'
         )
 
-    def test__RGB2grayscale__NAME_ME(self):
+    def test__RGB2grayscale__more_examples(self):
         self.assertListAlmostEqual(
             a1=[[67, 122, 70], [214, 89, 147]],
             a2=user.RGB2grayscale(
                 [[[170, 20, 35], [45, 154, 161], [175, 28, 9]],
                  [[251, 210, 134], [74, 105, 46], [79, 183, 139]]]
             ),
-            msg='NAME ME',
-            delta=2
+            delta=CartoonifyTests.MAX_DIFF_ALLOWED
         )
 
     def test__blur_kernel__example_from_pdf(self):
@@ -146,7 +144,8 @@ class CartoonifyTests(unittest.TestCase):
                 [[67, 122, 70], [214, 89, 147]], 
                 kernel
             ),
-            CartoonifyTests.BETA_TEST_WARNING +
+            delta=CartoonifyTests.MAX_DIFF_ALLOWED,
+            msg=CartoonifyTests.BETA_TEST_WARNING +
             '\nAccording to https://moodle2.cs.huji.ac.il/nu21/mod/forumng/discuss.php?d=2288#p6063, apply_kernel should support any kernel'
         )
 
@@ -274,7 +273,8 @@ class CartoonifyTests(unittest.TestCase):
                 [[[170, 20, 35], [45, 154, 161], [175, 28, 9]],
                  [[251, 210, 134], [74, 105, 46], [79, 183, 139]]],
                 8
-            )
+            ),
+            delta=CartoonifyTests.MAX_DIFF_ALLOWED
         )
         self.assertListAlmostEqual(
             [[[0, 8], [0, 20], [0, 28], [4, 40]],
@@ -286,7 +286,8 @@ class CartoonifyTests(unittest.TestCase):
                 [[5, 50], [6, 60], [7, 70], [8, 80]],
                 [[9, 90], [10, 100], [11, 110], [12, 120]],
                 [[13, 130], [14, 140], [15, 150], [16, 160]]], 64
-            )
+            ),
+            CartoonifyTests.MAX_DIFF_ALLOWED
         )
 
     def test__add_mask__example_from_pdf(self):
@@ -332,7 +333,8 @@ class CartoonifyTests(unittest.TestCase):
                 [[[170, 20, 35], [45, 154, 161], [175, 28, 9]],
                  [[251, 210, 134], [74, 105, 46], [79, 183, 139]]],
                 3, 3, 1, 8
-            )
+            ),
+            delta=CartoonifyTests.MAX_DIFF_ALLOWED
         )
 
     def assertListAlmostEqual(self, a1, a2, delta=1, msg=None):
