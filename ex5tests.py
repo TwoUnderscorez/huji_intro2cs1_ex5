@@ -3,6 +3,8 @@ from typing import Any
 
 import cartoonify as user
 
+VERSION = 1
+
 
 class CartoonifyTests(unittest.TestCase):
     MAX_DIFF_ALLOWED = 1
