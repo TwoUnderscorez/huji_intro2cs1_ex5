@@ -116,6 +116,19 @@ class CartoonifyTests(unittest.TestCase):
             'Kernel size of 7'
         )
 
+    def test__blur_kernel__negative_values(self):
+        msg = "\nAccording to the PDF size is an odd integer, doesn't have to be non-negative"
+        self.assertListEqual(
+            [[1 / 25 for _ in range(5)] for _ in range(5)],
+            user.blur_kernel(-5),
+            'Kernel size of 5 with values of 1/25 with size=-5'+msg
+        )
+        self.assertListEqual(
+            [[1 / 49 for _ in range(7)] for _ in range(7)],
+            user.blur_kernel(-7),
+            'Kernel size of 5 with values of 1/25 with size=-5'+msg
+        )
+
     def test__apply_kernel__example_from_pdf(self):
         blur_kernel = [[1/9, 1/9, 1/9], [1/9, 1/9, 1/9], [1/9, 1/9, 1/9]]
         self.assertListEqual(
@@ -132,8 +145,7 @@ class CartoonifyTests(unittest.TestCase):
                        [0.04, 0.04, 0.04, 0.04, 0.04]]
         self.assertListEqual(
             [[79, 121, 82], [191, 96, 140]],
-            user.apply_kernel([[67, 122, 70], [214, 89, 147]], blur_kernel),
-            CartoonifyTests.BETA_TEST_WARNING
+            user.apply_kernel([[67, 122, 70], [214, 89, 147]], blur_kernel)
         )
 
     def test__apply_kernel__supports_generic_kernel(self):
@@ -141,12 +153,11 @@ class CartoonifyTests(unittest.TestCase):
         self.assertListAlmostEqual(
             [[47, 56, 41], [83, 48, 62]],
             user.apply_kernel(
-                [[67, 122, 70], [214, 89, 147]], 
+                [[67, 122, 70], [214, 89, 147]],
                 kernel
             ),
             delta=CartoonifyTests.MAX_DIFF_ALLOWED,
-            msg=CartoonifyTests.BETA_TEST_WARNING +
-            '\nAccording to https://moodle2.cs.huji.ac.il/nu21/mod/forumng/discuss.php?d=2288#p6063, apply_kernel should support any kernel'
+            msg='According to https://moodle2.cs.huji.ac.il/nu21/mod/forumng/discuss.php?d=2288#p6063, apply_kernel should support any kernel'
         )
 
     def test__bilinear_interpolation__example_from_pdf(self):
@@ -180,7 +191,7 @@ class CartoonifyTests(unittest.TestCase):
         image = [[67, 122, 70], [214, 89, 147]]
         self.assertAlmostEqual(
             114,
-            user.bilinear_interpolation(image, 1.3, 0.8),
+            user.bilinear_interpolation(image, 1, 0.8),
             msg='NAME ME',
             delta=CartoonifyTests.MAX_DIFF_ALLOWED
         )
@@ -278,16 +289,16 @@ class CartoonifyTests(unittest.TestCase):
         )
         self.assertListAlmostEqual(
             [[[0, 8], [0, 20], [0, 28], [4, 40]],
-               [[4, 48], [4, 60], [4, 68], [8, 80]],
-               [[8, 88], [8, 100], [8, 108], [12, 120]],
-               [[12, 128], [12, 139], [12, 147], [16, 159]]],
+             [[4, 48], [4, 60], [4, 68], [8, 80]],
+             [[8, 88], [8, 100], [8, 108], [12, 120]],
+             [[12, 128], [12, 139], [12, 147], [16, 159]]],
             user.quantize_colored_image(
-               [[[1, 10], [2, 20], [3, 30], [4, 40]],
-                [[5, 50], [6, 60], [7, 70], [8, 80]],
-                [[9, 90], [10, 100], [11, 110], [12, 120]],
-                [[13, 130], [14, 140], [15, 150], [16, 160]]], 64
+                [[[1, 10], [2, 20], [3, 30], [4, 40]],
+                 [[5, 50], [6, 60], [7, 70], [8, 80]],
+                 [[9, 90], [10, 100], [11, 110], [12, 120]],
+                 [[13, 130], [14, 140], [15, 150], [16, 160]]], 64
             ),
-            CartoonifyTests.MAX_DIFF_ALLOWED
+            delta=CartoonifyTests.MAX_DIFF_ALLOWED
         )
 
     def test__add_mask__example_from_pdf(self):
@@ -323,6 +334,22 @@ class CartoonifyTests(unittest.TestCase):
                 [[1.0, 0.5, 0.33], [0.25, 0.2, 0.17]]
             ),
             message
+        )
+
+    def test__resize__various_tests(self):
+        self.assertListAlmostEqual(
+            [[1, 4], [7, 10], [13, 16]],
+            user.resize([[1, 2, 3, 4], [5, 6, 7, 8], [
+                        9, 10, 11, 12], [13, 14, 15, 16]], 3, 2),
+            delta=CartoonifyTests.MAX_DIFF_ALLOWED
+        )
+        self.assertListAlmostEqual(
+            [[67, 94, 122, 96, 70],
+             [104, 109, 114, 102, 89],
+             [140, 123, 106, 107, 108],
+             [177, 137, 97, 112, 128],
+             [214, 152, 89, 118, 147]],
+            user.resize([[67, 122, 70], [214, 89, 147]], 5, 5)
         )
 
     def test__cartoonify__generic_test(self):
@@ -452,16 +479,25 @@ def version_check():
 def main():
     if version_check():
         print('Up to date, running tests...')
+        unittest.main(exit=False)
         print("If a test has failed when it shouldn't have, please contact me at yutkin@cs.huji.ac.il or open an issue or a pull request here: https://github.com/TwoUnderscorez/huji_intro2cs1_ex5")
-        unittest.main()
+        print(CHANGELOG)
     else:
         print("We've updated the tests file, please download the new one form here")
         print('https://raw.githubusercontent.com/TwoUnderscorez/huji_intro2cs1_ex5/master/ex5tests.py')
 
 
 # .data
-VERSION = 1
+VERSION = 2
 VERSION_CHECK = 'https://raw.githubusercontent.com/TwoUnderscorez/huji_intro2cs1_ex5/master/VERSION'
-
+CHANGELOG = '''
+Changelog:
+Version 2:
+ - Added:
+    * blur_kernel should accept negative values.
+    * Resize tests
+ - Changed:
+   * test__bilinear_interpolation__more_tests_on_3by3 no longer tests on coordinates outside the matrix, but rather on the edge 
+'''
 if __name__ == '__main__':
     main()
