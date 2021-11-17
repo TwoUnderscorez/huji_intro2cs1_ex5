@@ -117,17 +117,8 @@ class CartoonifyTests(unittest.TestCase):
         )
 
     def test__blur_kernel__negative_values(self):
-        msg = "\nAccording to the PDF size is an odd integer, doesn't have to be non-negative"
-        self.assertListEqual(
-            [[1 / 25 for _ in range(5)] for _ in range(5)],
-            user.blur_kernel(-5),
-            'Kernel size of 5 with values of 1/25 with size=-5'+msg
-        )
-        self.assertListEqual(
-            [[1 / 49 for _ in range(7)] for _ in range(7)],
-            user.blur_kernel(-7),
-            'Kernel size of 5 with values of 1/25 with size=-5'+msg
-        )
+        # No longer relevant: https://moodle2.cs.huji.ac.il/nu21/mod/forumng/discuss.php?d=2959
+        pass
 
     def test__apply_kernel__example_from_pdf(self):
         blur_kernel = [[1/9, 1/9, 1/9], [1/9, 1/9, 1/9], [1/9, 1/9, 1/9]]
@@ -492,6 +483,9 @@ VERSION = 2
 VERSION_CHECK = 'https://raw.githubusercontent.com/TwoUnderscorez/huji_intro2cs1_ex5/master/VERSION'
 CHANGELOG = '''
 Changelog:
+Version 3:
+  - Removed:
+    * The size parameter in blur_kernel can be assumed to be a non-negative and odd integer: https://moodle2.cs.huji.ac.il/nu21/mod/forumng/discuss.php?d=2959
 Version 2:
  - Added:
     * blur_kernel should accept negative values.
