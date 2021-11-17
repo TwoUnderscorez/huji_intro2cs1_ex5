@@ -479,7 +479,7 @@ def main():
 
 
 # .data
-VERSION = 2
+VERSION = 3
 VERSION_CHECK = 'https://raw.githubusercontent.com/TwoUnderscorez/huji_intro2cs1_ex5/master/VERSION'
 CHANGELOG = '''
 Changelog:
